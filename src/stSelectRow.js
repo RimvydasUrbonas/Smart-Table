@@ -1,5 +1,5 @@
 ng.module('smart-table')
-    .directive('stSelectRow', ['smartTableConfig', function (smartTableConfig) {
+    .directive('stSelectRow', ['stConfig', function (stConfig) {
         return {
             restrict: 'A',
             require: '^stTable',
@@ -8,14 +8,14 @@ ng.module('smart-table')
                 onSelected: '&'
             },
             link: function (scope, element, attr, ctrl) {
-                var mode = attr.stSelectMode || 'single';
+                var mode = attr.stSelectMode || stConfig.select.mode;
                 var onSelected = null;
 
                 attr.$observe('onSelected', function (value) {
                     onSelected = scope.$parent.$eval(value);
                 });
 
-                element.find('td:not(.' + smartTableConfig.notSelectableCol + ')').bind('click', function () {
+                element.find('td:not(.' + stConfig.select.notSelectableColClass + ')').bind('click', function () {
                     scope.$apply(function () {
                         ctrl.select(scope.row, mode);
                         if (onSelected) {
@@ -24,14 +24,13 @@ ng.module('smart-table')
                     });
                 });
 
-                scope.$watch('row.isSelected', function (newValue, oldValue) {
-                    if (newValue === true) {
-                        element.addClass(smartTableConfig.selectedRowClass);
-                    } else {
-                        element.removeClass(smartTableConfig.selectedRowClass);
-                    }
-                });
-
-            }
-        };
-    }]);
+        scope.$watch('row.isSelected', function (newValue) {
+          if (newValue === true) {
+            element.addClass(stConfig.select.selectedClass);
+          } else {
+            element.removeClass(stConfig.select.selectedClass);
+          }
+        });
+      }
+    };
+  }]);

@@ -1,5 +1,5 @@
 ﻿ng.module('smart-table')
-.directive('stEditableRow', ['$parse', '$timeout', 'smartTableConfig', function ($parse, $timeout, smartTableConfig) {
+.directive('stEditableRow', ['$parse', '$timeout', 'stConfig', function ($parse, $timeout, stConfig) {
     return {
         restrict: 'A',
         require: ['form', '^stTable'],
@@ -9,8 +9,8 @@
             var mode = attrs.stSelectMode || 'single';
             var onSelected = null;
             var beforeSelected = null;
-            var editMode = smartTableConfig.rowEditMode;
-            var defaultEditResolution = smartTableConfig.defaultEditResolution;
+            var editMode = stConfig.edit.rowEditMode;
+            var defaultEditResolution = stConfig.edit.defaultEditResolution;
             scope.form = ctrl[0];
             var tableController = ctrl[1];
 
@@ -74,7 +74,7 @@
                 beforeSelected = scope.$parent.$eval(value);
             });
 
-            element.find('td:not(.' + smartTableConfig.notSelectableCol + ')').bind('click', function () {
+            element.find('td:not(.' + stConfig.select.notSelectableColClass + ')').bind('click', function () {
                 scope.$apply(function () {
                     if (ng.isFunction(beforeSelected)) {
                         beforeSelected(scope.$row, tableController).then(function () {
@@ -89,9 +89,9 @@
 
             scope.$watch('$row.isSelected', function (newValue, oldValue) {
                 if (newValue === true) {
-                    element.addClass(smartTableConfig.selectedRowClass);
+                    element.addClass(stConfig.select.selectedClass);
                 } else {
-                    element.removeClass(smartTableConfig.selectedRowClass);
+                    element.removeClass(stConfig.select.selectedClass);
                 }
             });
 
