@@ -15,7 +15,7 @@ ng.module('smart-table')
                     onSelected = scope.$parent.$eval(value);
                 });
 
-                element.bind('click', function () {
+                element.find('td:not(.' + smartTableConfig.notSelectableCol + ')').bind('click', function () {
                     scope.$apply(function () {
                         ctrl.select(scope.row, mode);
                         if (onSelected) {
@@ -31,6 +31,7 @@ ng.module('smart-table')
                         element.removeClass(smartTableConfig.selectedRowClass);
                     }
                 });
+
             }
         };
     }]);

@@ -1,7 +1,10 @@
 ng.module('smart-table')
     .provider('smartTableConfig', function () {
                         var config = {
-                            selectedRowClass: 'st-selected'
+                            selectedRowClass: 'st-selected',
+                            notSelectableCol: 'st-not-selectable',
+                            defaultEditResolution: 'reject',
+                            rowEditMode: 'single'
                         };
                         var emptyController = function () { };
 
@@ -26,7 +29,10 @@ ng.module('smart-table')
                         }
 
                         var setters = {
-                            'selectedRowClass': stringSetter
+                            'selectedRowClass': stringSetter,
+                            'notSelectableCol': stringSetter,
+                            'defaultEditResolution': stringSetter,
+                            'rowEditMode': stringSetter
                         };
 
                         this.$get = function () {
@@ -211,6 +217,11 @@ ng.module('smart-table')
          */
         this.preventPipeOnWatch = function preventPipe() {
             pipeAfterSafeCopy = false;
+        };
+
+        this.find = function (expression) {
+            var rows = safeCopy;
+            return $filter('filter')(rows, expression);
         };
     }])
     .directive('stTable', function () {
